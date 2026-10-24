@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PythonCraft — Learn Python from Scratch to Mastery</title>
+  <meta name="description" content="An interactive, modern web application designed to teach Python programming from beginner to advanced with lessons, in-browser code playground, and quizzes.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Skulpt: Client-side Python Interpreter with stdlib -->
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+</head>
+<body>
+  <!-- Global Navigation Bar -->
+  <header class="navbar-wrapper">
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo" aria-label="PythonCraft Home">
+        <div class="logo-icon">
+          <svg viewBox="0 0 128 128" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M63.5 8C33.4 8 35.3 21 35.3 21l.1 13.5h28.6v4.1H23.5S8 36.8 8 66.8s13.6 29.5 13.6 29.5h8.1v-11.4s-.4-13.6 13.4-13.6h28.4s12.8.2 12.8-12.4V21.1S87.4 8 63.5 8zm-15.6 8.3c2.7 0 4.9 2.2 4.9 4.9s-2.2 4.9-4.9 4.9-4.9-2.2-4.9-4.9 2.2-4.9 4.9-4.9z" fill="url(#python-gradient-blue)"/>
+            <path d="M64.5 120c30.1 0 28.2-13 28.2-13l-.1-13.5H64v-4.1h40.5s15.5 1.8 15.5-28.2-13.6-29.5-13.6-29.5h-8.1v11.4s.4 13.6-13.4 13.6H47s-12.8-.2-12.8 12.4v47.8s-3.1 13.1 20.8 13.1zm15.6-8.3c-2.7 0-4.9-2.2-4.9-4.9s2.2-4.9 4.9-4.9 4.9 2.2 4.9 4.9-2.2 4.9-4.9 4.9z" fill="url(#python-gradient-yellow)"/>
+            <defs>
+              <linearGradient id="python-gradient-blue" x1="14" y1="12" x2="80" y2="78" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#387eb8"/>
+                <stop offset="1" stop-color="#366994"/>
+              </linearGradient>
+              <linearGradient id="python-gradient-yellow" x1="114" y1="116" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#ffe873"/>
+                <stop offset="1" stop-color="#ffd43b"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="brand-text">Python<span class="text-accent">Craft</span></span>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="nav-links" id="navLinks" aria-label="Main Navigation">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#curriculum" class="nav-link">Curriculum</a>
+        <a href="#playground" class="nav-link">Playground</a>
+        <a href="#quizzes" class="nav-link">Quizzes</a>
+        <a href="#cheatsheet" class="nav-link">Cheat Sheet</a>
+        <a href="#about" class="nav-link">About</a>
+      </nav>
+
+      <!-- Utility Controls: Theme Switch & Mobile Toggle -->
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="btn-icon theme-toggle" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+          <span class="theme-icon sun-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </span>
+          <span class="theme-icon moon-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
+        </button>
+
+        <a href="#playground" class="btn btn-primary btn-sm btn-nav-cta">Try Playground</a>
+
+        <button id="mobileMenuBtn" class="btn-icon mobile-menu-toggle" aria-label="Open mobile menu">
+          <svg class="hamburger-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="hero-bg-glow glow-1"></div>
+      <div class="hero-bg-glow glow-2"></div>
+      
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="badge-pill">
+            <span class="badge-dot"></span>
+            <span>Interactive Zero to Mastery Academy</span>
+          </div>
+          <h1 class="hero-title">
+            Master <span class="gradient-text">Python</span> Programming with Hands-on Code
+          </h1>
+          <p class="hero-description">
+            Experience structured, interactive lessons from absolute basics to advanced software concepts. Write, execute, and debug Python code right inside your browser without any installation.
+          </p>
+          <div class="hero-actions">
+            <a href="#curriculum" class="btn btn-primary btn-lg">
+              <span>Start Learning</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <a href="#playground" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Open Playground</span>
+            </a>
+          </div>
+
+          <!-- Quick Stats Banner -->
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number">3 Tiers</div>
+              <div class="stat-label">Beginner to Advanced</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-number">11 Lessons</div>
+              <div class="stat-label">Detailed & Interactive</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-number">Live REPL</div>
+              <div class="stat-label">Instant Code Execution</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-number">100% Free</div>
+              <div class="stat-label">In-Browser Storage</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Preview Code Box -->
+        <div class="hero-preview-wrapper">
+          <div class="code-preview-card">
+            <div class="terminal-bar">
+              <div class="window-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="window-title">welcome.py</span>
+              <span class="window-lang">Python 3</span>
+            </div>
+            <div class="code-preview-body">
+              <pre><code><span class="token-comment"># Welcome to PythonCraft!</span>
+<span class="token-keyword">def</span> <span class="token-func">create_developer</span>(name, passion):
+    skills = [<span class="token-string">"Logic"</span>, <span class="token-string">"Problem Solving"</span>, <span class="token-string">"Python"</span>]
+    <span class="token-keyword">return</span> {
+        <span class="token-string">"dev"</span>: name,
+        <span class="token-string">"level"</span>: <span class="token-string">"Mastery"</span>,
+        <span class="token-string">"skills"</span>: skills,
+        <span class="token-string">"ready"</span>: <span class="token-builtin">True</span>
+    }
+
+user = create_developer(<span class="token-string">"You"</span>, <span class="token-string">"Coding"</span>)
+<span class="token-builtin">print</span>(<span class="token-string">f"🚀 Welcome, {user['dev']}! Ready for {user['level']}?"</span>)</code></pre>
+            </div>
+            <div class="code-preview-footer">
+              <button class="btn btn-sm btn-preview-run" id="heroTryBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span>Run this snippet in Playground</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comprehensive Curriculum Section -->
+    <section id="curriculum" class="section curriculum-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Structured Roadmap</div>
+          <h2 class="section-title">The Complete Python Curriculum</h2>
+          <p class="section-subtitle">
+            Progress step-by-step from core syntax fundamentals to intermediate data structures and advanced patterns.
+          </p>
+        </div>
+
+        <!-- Tier Navigation Tabs -->
+        <div class="tier-nav" role="tablist" aria-label="Curriculum Tiers">
+          <button class="tier-tab active" data-tier="all" role="tab" aria-selected="true">
+            <span class="tab-badge">11</span>
+            <span>All Lessons</span>
+          </button>
+          <button class="tier-tab" data-tier="beginner" role="tab" aria-selected="false">
+            <span class="tab-badge badge-beginner">4</span>
+            <span>Beginner Tier</span>
+          </button>
+          <button class="tier-tab" data-tier="intermediate" role="tab" aria-selected="false">
+            <span class="tab-badge badge-intermediate">4</span>
+            <span>Intermediate Tier</span>
+          </button>
+          <button class="tier-tab" data-tier="advanced" role="tab" aria-selected="false">
+            <span class="tab-badge badge-advanced">3</span>
+            <span>Advanced Tier</span>
+          </button>
+        </div>
+
+        <!-- Curriculum Grid Container (Populated by script.js) -->
+        <div class="curriculum-grid" id="curriculumGrid">
+          <!-- Dynamically populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Code Playground Section -->
+    <section id="playground" class="section playground-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Interactive Environment</div>
+          <h2 class="section-title">Interactive Python Playground</h2>
+          <p class="section-subtitle">
+            Write code, select ready-to-learn examples, and experience live client-side execution with simulated console output.
+          </p>
+        </div>
+
+        <div class="playground-card">
+          <!-- Playground Top Bar -->
+          <div class="playground-toolbar">
+            <div class="toolbar-left">
+              <label for="snippetSelect" class="toolbar-label">Load Template:</label>
+              <div class="select-wrapper">
+                <select id="snippetSelect" class="select-control" aria-label="Select code example template">
+                  <optgroup label="Beginner">
+                    <option value="hello">Hello, World & Variables</option>
+                    <option value="conditionals">Conditionals & Logic</option>
+                    <option value="loops">For & While Loops</option>
+                  </optgroup>
+                  <optgroup label="Intermediate">
+                    <option value="functions">Functions & Arbitrary Args</option>
+                    <option value="lists">Lists & Comprehensions</option>
+                    <option value="dicts">Dictionaries & Data Analysis</option>
+                    <option value="oop">Object-Oriented Programming (Classes)</option>
+                  </optgroup>
+                  <optgroup label="Advanced">
+                    <option value="errors">Error & Exception Handling</option>
+                    <option value="files">File Operations Simulation</option>
+                    <option value="modules">Standard Modules (math, random)</option>
+                    <option value="fibonacci">Fibonacci Algorithm Benchmark</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+
+            <div class="toolbar-right">
+              <button id="clearCodeBtn" class="btn btn-outline btn-sm" title="Clear Editor">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Clear</span>
+              </button>
+              <button id="copyCodeBtn" class="btn btn-outline btn-sm" title="Copy code to clipboard">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copyBtnText">Copy</span>
+              </button>
+              <button id="runCodeBtn" class="btn btn-primary btn-sm btn-run">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span>Run Code</span>
+                <span class="btn-kbd">Ctrl+↵</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Split Workspace: Editor & Terminal -->
+          <div class="playground-workspace">
+            <!-- Code Editor Side -->
+            <div class="editor-pane">
+              <div class="pane-header">
+                <div class="pane-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                  </svg>
+                  <span>main.py</span>
+                </div>
+                <div class="pane-meta" id="lineColCounter">Line 1, Col 1</div>
+              </div>
+              <div class="editor-container">
+                <div class="line-numbers" id="lineNumbers">1</div>
+                <textarea id="codeEditor" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="# Write your Python code here..."></textarea>
+              </div>
+            </div>
+
+            <!-- Terminal Output Side -->
+            <div class="terminal-pane">
+              <div class="pane-header">
+                <div class="pane-title">
+                  <div class="terminal-dots">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                  </div>
+                  <span>Execution Output Console</span>
+                </div>
+                <div class="terminal-actions">
+                  <span id="executionStatus" class="status-indicator ready">Idle</span>
+                  <button id="clearTerminalBtn" class="btn-terminal-clear" title="Clear Console">
+                    Clear Terminal
+                  </button>
+                </div>
+              </div>
+
+              <div class="terminal-body" id="terminalOutput">
+                <div class="terminal-welcome">
+                  <p class="term-dim"># PythonCraft In-Browser Interactive Console</p>
+                  <p class="term-dim"># Click "Run Code" or press Ctrl+Enter / Cmd+Enter to execute.</p>
+                  <p class="term-ready">Python 3.x ready. Output will appear below:</p>
+                </div>
+              </div>
+
+              <!-- Interactive Input Modal / Bar (If input() is executed) -->
+              <div class="terminal-input-bar hidden" id="terminalInputBar">
+                <span class="input-prompt" id="terminalInputPrompt">Enter input:</span>
+                <input type="text" id="terminalInputField" placeholder="Type here and press Enter...">
+                <button id="terminalInputSubmitBtn" class="btn btn-sm btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quizzes & Mini-Challenges Section -->
+    <section id="quizzes" class="section quizzes-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Knowledge Check</div>
+          <h2 class="section-title">Interactive Quizzes & Challenges</h2>
+          <p class="section-subtitle">
+            Validate your mastery with immediate feedback, detailed rationales, and live score metrics.
+          </p>
+        </div>
+
+        <!-- Quiz Progress & Dashboard -->
+        <div class="quiz-dashboard">
+          <div class="quiz-stat-card">
+            <span class="quiz-stat-label">Total Score</span>
+            <span class="quiz-stat-val" id="quizScoreText">0 / 0</span>
+          </div>
+          <div class="quiz-stat-card">
+            <span class="quiz-stat-label">Accuracy Rate</span>
+            <span class="quiz-stat-val" id="quizAccuracyText">0%</span>
+          </div>
+          <div class="quiz-stat-card">
+            <span class="quiz-stat-label">Current Streak</span>
+            <span class="quiz-stat-val" id="quizStreakText">🔥 0</span>
+          </div>
+          <div class="quiz-actions-box">
+            <button id="resetQuizBtn" class="btn btn-outline btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2.5 2v6h6M21.5 22v-6h-6"></path>
+                <path d="M22 11.5A10 10 0 0 0 3.2 7.2L2.5 8M2 12.5a10 10 0 0 0 18.8 4.2l.7.8"></path>
+              </svg>
+              <span>Reset Score</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tier Filter for Quizzes -->
+        <div class="quiz-filter-bar">
+          <span class="filter-label">Filter Quizzes:</span>
+          <div class="filter-pills">
+            <button class="filter-pill active" data-quiz-tier="all">All Topics</button>
+            <button class="filter-pill" data-quiz-tier="beginner">Beginner</button>
+            <button class="filter-pill" data-quiz-tier="intermediate">Intermediate</button>
+            <button class="filter-pill" data-quiz-tier="advanced">Advanced</button>
+          </div>
+        </div>
+
+        <!-- Quiz Cards Container -->
+        <div class="quiz-grid" id="quizGrid">
+          <!-- Dynamically populated by script.js -->
+        </div>
+
+        <!-- Mini Coding Challenge Widget -->
+        <div class="challenge-box">
+          <div class="challenge-header">
+            <div class="challenge-badge">⚡ Live Coding Challenge</div>
+            <h3 class="challenge-title">Challenge: Reverse Words in a String</h3>
+            <p class="challenge-desc">Write Python logic that takes a sentence and reverses the order of the words.</p>
+          </div>
+          <div class="challenge-body">
+            <div class="challenge-code-sample">
+              <code>sentence = "Python is amazingly fun"<br># Output should be: "fun amazingly is Python"</code>
+            </div>
+            <button class="btn btn-primary btn-sm" id="loadChallengeBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Solve in Playground</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Python Quick Reference Cheat Sheet Section -->
+    <section id="cheatsheet" class="section cheatsheet-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Quick Reference</div>
+          <h2 class="section-title">Python Developer Cheat Sheet</h2>
+          <p class="section-subtitle">
+            Essential built-in functions, methods, and syntax patterns at your fingertips.
+          </p>
+        </div>
+
+        <div class="cheatsheet-grid">
+          <!-- Card 1: Essential Built-in Functions -->
+          <div class="cheat-card">
+            <div class="cheat-header">
+              <h3 class="cheat-title">Core Built-in Functions</h3>
+              <span class="cheat-badge">Built-ins</span>
+            </div>
+            <ul class="cheat-list">
+              <li><code>print(*values, sep=' ')</code> <span>Outputs to console</span></li>
+              <li><code>len(sequence)</code> <span>Returns item count</span></li>
+              <li><code>type(object)</code> <span>Returns data type</span></li>
+              <li><code>range(start, stop, step)</code> <span>Generates number sequence</span></li>
+              <li><code>enumerate(iterable)</code> <span>Pairs index and item</span></li>
+              <li><code>zip(*iterables)</code> <span>Combines multiple iterables</span></li>
+              <li><code>sorted(iterable, reverse=False)</code> <span>Returns sorted list</span></li>
+            </ul>
+          </div>
+
+          <!-- Card 2: String Methods -->
+          <div class="cheat-card">
+            <div class="cheat-header">
+              <h3 class="cheat-title">Common String Methods</h3>
+              <span class="cheat-badge">Strings</span>
+            </div>
+            <ul class="cheat-list">
+              <li><code>s.strip()</code> <span>Removes surrounding whitespace</span></li>
+              <li><code>s.split(delimiter)</code> <span>Splits string into list</span></li>
+              <li><code>delimiter.join(list)</code> <span>Joins list into string</span></li>
+              <li><code>s.replace(old, new)</code> <span>Replaces substrings</span></li>
+              <li><code>s.startswith(prefix)</code> <span>Checks prefix condition</span></li>
+              <li><code>s.lower() / s.upper()</code> <span>Case conversion</span></li>
+              <li><code>f"{variable}"</code> <span>Modern string interpolation</span></li>
+            </ul>
+          </div>
+
+          <!-- Card 3: List & Dict Operations -->
+          <div class="cheat-card">
+            <div class="cheat-header">
+              <h3 class="cheat-title">Data Structures Syntax</h3>
+              <span class="cheat-badge">Collections</span>
+            </div>
+            <ul class="cheat-list">
+              <li><code>lst.append(x)</code> <span>Add element to list end</span></li>
+              <li><code>lst.pop(index)</code> <span>Remove & return item</span></li>
+              <li><code>[x**2 for x in nums]</code> <span>List comprehension</span></li>
+              <li><code>d.get(key, default)</code> <span>Safe dictionary retrieval</span></li>
+              <li><code>d.items()</code> <span>Returns (key, value) pairs</span></li>
+              <li><code>set_a | set_b</code> <span>Set union operation</span></li>
+              <li><code>set_a & set_b</code> <span>Set intersection</span></li>
+            </ul>
+          </div>
+
+          <!-- Card 4: Control Flow & OOP -->
+          <div class="cheat-card">
+            <div class="cheat-header">
+              <h3 class="cheat-title">OOP & Exception Handling</h3>
+              <span class="cheat-badge">Patterns</span>
+            </div>
+            <ul class="cheat-list">
+              <li><code>class Child(Parent):</code> <span>Inheritance definition</span></li>
+              <li><code>def __init__(self):</code> <span>Object constructor</span></li>
+              <li><code>try: ... except Err as e:</code> <span>Error catching block</span></li>
+              <li><code>finally:</code> <span>Always executed cleanup block</span></li>
+              <li><code>with open(file) as f:</code> <span>Safe context manager</span></li>
+              <li><code>raise ValueError("msg")</code> <span>Explicitly trigger error</span></li>
+              <li><code>lambda x: x * 2</code> <span>Anonymous inline function</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+      <div class="container">
+        <div class="about-card">
+          <div class="about-content">
+            <div class="section-tag">About The Platform</div>
+            <h2 class="about-title">Built for Curious Minds and Future Engineers</h2>
+            <p class="about-text">
+              Python is renowned worldwide for its elegant, human-readable syntax and immense power—fueling artificial intelligence, web development, data science, and automation.
+            </p>
+            <p class="about-text">
+              <strong>PythonCraft</strong> was created to eliminate the intimidating setup hurdles. Everything you see—the interactive curriculum, code compiler simulator, quizzes, and live cheat sheet—runs 100% locally in your modern web browser with zero server latency or installations required.
+            </p>
+            <div class="about-highlights">
+              <div class="highlight-item">
+                <span class="highlight-icon">⚡</span>
+                <div>
+                  <strong>Instant Feedback</strong>
+                  <p>Execute scripts and see output immediately with line tracking and error diagnostics.</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">🔒</span>
+                <div>
+                  <strong>Local Persistence</strong>
+                  <p>Your theme preference, playground state, and quiz progress stay saved on your device.</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-icon">📱</span>
+                <div>
+                  <strong>Fully Responsive</strong>
+                  <p>Learn and practice anywhere: desktop, tablet, or smartphone.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lesson Detailed Modal -->
+  <div class="modal-backdrop" id="lessonModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-header-meta">
+          <span class="modal-tier-badge" id="modalTierBadge">Beginner</span>
+          <h3 class="modal-title" id="modalTitle">Lesson Title</h3>
+        </div>
+        <button class="btn-icon modal-close" id="modalCloseBtn" aria-label="Close lesson details">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modalDismissBtn">Close</button>
+        <button class="btn btn-primary" id="modalRunInPlaygroundBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span>Try Lesson in Playground</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <span class="brand-text">Python<span class="text-accent">Craft</span></span>
+        </div>
+        <p class="footer-tagline">Learn Python from scratch to mastery with interactive code and live quizzes.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#hero">Home</a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#playground">Playground</a>
+        <a href="#quizzes">Quizzes</a>
+        <a href="#cheatsheet">Cheat Sheet</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 PythonCraft. Built with vanilla HTML5, CSS3, and JavaScript. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
